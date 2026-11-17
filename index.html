@@ -48,17 +48,17 @@ button{font:inherit;color:inherit;background:none;border:0}
 .scene{position:absolute;left:50%;top:50%;width:max(100%,108svh);aspect-ratio:2576/1431;translate:-50% -50%;
   -webkit-mask-image:linear-gradient(#000 66%,rgba(0,0,0,.38));mask-image:linear-gradient(#000 66%,rgba(0,0,0,.38))}
 @media (max-aspect-ratio:1/1){ .scene{-webkit-mask-image:linear-gradient(#000 60%,transparent);mask-image:linear-gradient(#000 60%,transparent)} }
-.gate{position:absolute;left:0;top:-8.1%;width:100%;aspect-ratio:1600/2504;perspective:1500px;
+.gate{position:absolute;left:0;top:-8.1%;width:100%;aspect-ratio:1600/2504;perspective:1500px;perspective-origin:50% 21%;
   transform-origin:50% 21%;transition:transform 1.35s cubic-bezier(.6,0,.85,.4)}
-/* the leaves open slowly, then swing away fast; the camera pushes through as they go */
+/* the leaves swing toward us — slowly, then fast — while the camera pushes through */
 .door{position:absolute;top:0;width:50%;height:100%;will-change:transform;
-  transition:transform 1.35s cubic-bezier(.6,0,.85,.4),opacity .5s ease .85s}
+  transition:transform 1.35s cubic-bezier(.6,0,.85,.4),opacity .3s ease 1.1s}
 .door img{width:100%;height:100%;max-width:none}
 .door.l{left:0;transform-origin:0 50%}
 .door.r{right:0;transform-origin:100% 50%}
 .open .gate{transform:scale(1.3)}
-.open .door.l{transform:rotateY(84deg);opacity:0}
-.open .door.r{transform:rotateY(-84deg);opacity:0}
+.open .door.l{transform:rotateY(-86deg);opacity:0}
+.open .door.r{transform:rotateY(86deg);opacity:0}
 
 /* ───────── first screen: the lit keyhole ───────── */
 .lock{position:absolute;inset:0;z-index:5;display:block;width:100%;cursor:pointer;overflow:visible;
