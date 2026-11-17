@@ -43,17 +43,17 @@ button{font:inherit;color:inherit;background:none;border:0}
 .sky{position:absolute;inset:0;width:100%;height:100%;max-width:none;object-fit:cover}
 .sky.night{opacity:0;transition:opacity 1.3s ease .45s}
 .open .sky.night{opacity:1}
-/* the gate fills the height; on wide screens its cut-off sides fade into the sky */
-.gate{position:absolute;left:50%;top:0;height:100%;aspect-ratio:1600/2504;translate:-50% 0;perspective:1500px;
-  -webkit-mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent);
-          mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent);
-  transition:transform 1.35s cubic-bezier(.6,0,.85,.4)}
-@media (max-aspect-ratio:1600/2504){ .gate{-webkit-mask-image:none;mask-image:none} }
+/* poster-02 framing: a 16:9 frame (cover on wide screens, centred on phones) whose width the
+   gate's arch spans, spire ~17% down; the bars sink into the mist toward the bottom */
+.scene{position:absolute;left:50%;top:50%;width:max(100%,108svh);aspect-ratio:2576/1431;translate:-50% -50%;
+  -webkit-mask-image:linear-gradient(#000 66%,rgba(0,0,0,.38));mask-image:linear-gradient(#000 66%,rgba(0,0,0,.38))}
+@media (max-aspect-ratio:1/1){ .scene{-webkit-mask-image:linear-gradient(#000 60%,transparent);mask-image:linear-gradient(#000 60%,transparent)} }
+.gate{position:absolute;left:0;top:-8.1%;width:100%;aspect-ratio:1600/2504;perspective:1500px;
+  transform-origin:50% 21%;transition:transform 1.35s cubic-bezier(.6,0,.85,.4)}
 /* the leaves open slowly, then swing away fast; the camera pushes through as they go */
 .door{position:absolute;top:0;width:50%;height:100%;will-change:transform;
   transition:transform 1.35s cubic-bezier(.6,0,.85,.4),opacity .5s ease .85s}
-.door img{width:100%;height:100%;max-width:none;
-  -webkit-mask-image:linear-gradient(#000 60%,rgba(0,0,0,.45));mask-image:linear-gradient(#000 60%,rgba(0,0,0,.45))}
+.door img{width:100%;height:100%;max-width:none}
 .door.l{left:0;transform-origin:0 50%}
 .door.r{right:0;transform-origin:100% 50%}
 .open .gate{transform:scale(1.3)}
@@ -237,10 +237,10 @@ button{font:inherit;color:inherit;background:none;border:0}
   <div class="stage">
     <img class="sky day" src="img/sky-day.webp" alt="">
     <img class="sky night" src="img/sky-night.webp" alt="">
-    <div class="gate">
+    <div class="scene"><div class="gate">
       <div class="door l"><img src="img/gate-l.webp" alt=""></div>
       <div class="door r"><img src="img/gate-r.webp" alt=""></div>
-    </div>
+    </div></div>
   </div>
   <div class="grain"></div>
 
