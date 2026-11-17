@@ -1,0 +1,202 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#ffffff">
+<title>ONE STEP BEYOND — 2026 Graduation Ceremony</title>
+<meta name="description" content="2026 Graduation Ceremony · November 25 Wednesday 6:00 PM · SNU Cooperation R&D Center B 5F Square Hall">
+<meta property="og:title" content="ONE STEP BEYOND — HAPPILY EVER AFTER">
+<meta property="og:description" content="2026 Graduation Ceremony · 11.25 WED 6:00 PM">
+<link rel="preload" href="img/gate-l.webp" as="image">
+<link rel="preload" href="img/gate-r.webp" as="image">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,100..900&display=swap">
+<style>
+:root{
+  --ink:#34354a; --navy:#40455b; --card:#3d4160; --lav:#dfe3f5; --lav2:#b2bce8;
+  --gutter:16px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{background:#c9cdea;color:var(--ink);font-family:Archivo,'Helvetica Neue',Helvetica,Arial,sans-serif;-webkit-font-smoothing:antialiased}
+body{overflow-x:hidden}
+html,body{overflow:hidden;height:100svh;overscroll-behavior:none}
+img{display:block;max-width:100%;user-select:none;-webkit-user-drag:none}
+button{font:inherit;color:inherit;background:none;border:0}
+
+/* film grain (poster texture) */
+.grain{position:absolute;inset:0;pointer-events:none;opacity:.22;mix-blend-mode:multiply;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .2 0 0 0 0 .2 0 0 0 0 .3 0 0 0 1.4 -.4'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+
+/* ───────── hero ───────── */
+.hero{position:relative;height:100svh;min-height:560px;overflow:hidden;background:#fff;
+  --cw:min(28vw,14svh,140px)}               /* corner ornament width */
+/* poster-ratio stage: covers the viewport height, crops the sides on phones.
+   +0.04%: the gate's symmetry axis sits at x=1251 of 2504, so nudge it onto the exact centre */
+.stage{position:absolute;top:0;left:50%;height:100%;aspect-ratio:2504/3532;min-width:100%;
+  perspective:1400px;
+  opacity:0;filter:blur(10px);transform:translateX(calc(-50% + .04%)) scale(1.04);
+  transition:opacity 1.3s ease,filter 1.3s ease,transform 1.6s cubic-bezier(.2,.7,.2,1)}
+.unlock .stage{opacity:1;filter:none;transform:translateX(calc(-50% + .04%))}
+.door{position:absolute;top:0;width:50%;aspect-ratio:1000/2356;will-change:transform;
+  transition:transform 2.6s cubic-bezier(.55,0,.2,1),opacity 2.2s ease .5s}
+.door img{width:100%;height:100%;
+  -webkit-mask-image:linear-gradient(#000 48%,rgba(0,0,0,.6) 58%,rgba(0,0,0,.2) 65%,transparent 71%);
+          mask-image:linear-gradient(#000 48%,rgba(0,0,0,.6) 58%,rgba(0,0,0,.2) 65%,transparent 71%)}
+.door.l{left:0;transform-origin:0 50%}
+.door.r{right:0;transform-origin:100% 50%}
+.open .door.l{transform:rotateY(78deg);opacity:0}
+.open .door.r{transform:rotateY(-78deg);opacity:0}
+
+/* beyond the gate: the poster-02 night scene */
+.night{position:absolute;inset:0;background:var(--navy) url(img/navy.webp) center/cover;opacity:0;transition:opacity 1.8s ease .8s}
+.open .night{opacity:1}
+
+/* key: alone on the first screen, dead centre of the viewport */
+.key{position:absolute;z-index:3;top:50%;left:50%;transform:translate(-50%,-50%);display:block;line-height:0;cursor:pointer;
+  -webkit-tap-highlight-color:transparent;transition:opacity .9s ease .2s}
+.key img{width:clamp(70px,20vw,92px);height:auto;transition:transform .9s cubic-bezier(.3,0,.2,1),filter .9s}
+.key::before{content:"";position:absolute;width:220%;aspect-ratio:1;top:50%;left:50%;transform:translate(-50%,-50%);border-radius:50%;
+  background:radial-gradient(closest-side,rgba(210,215,245,.55),rgba(225,229,250,.25) 55%,transparent);animation:glow 2.4s ease-in-out infinite;z-index:-1}
+@keyframes glow{50%{transform:translate(-50%,-50%) scale(1.15);opacity:.5}}
+.key:active img{transform:scale(.95)}
+.unlock .key{opacity:0;pointer-events:none}
+.unlock .key img{transform:scale(1.2);filter:drop-shadow(0 0 14px rgba(200,206,245,.9))}
+.unlock .key::before{animation:none;opacity:0;transition:opacity .6s}
+
+.hero .corner{z-index:2}
+.reveal .corner.rv{opacity:.95}
+.content{position:relative;z-index:2;height:100%;display:flex;flex-direction:column;align-items:center;text-align:center;color:var(--lav);
+  padding:calc(env(safe-area-inset-top) + 18px + var(--cw)*1.134 + 8px) 28px calc(env(safe-area-inset-bottom) + 18px + var(--cw)*1.134 + 6px);
+  pointer-events:none}
+.amp{font-family:'Helvetica Neue',Helvetica,Arial,sans-serif}
+
+/* elements slide in from the top, one after another (translate keeps the corners' mirror transforms intact) */
+.rv{opacity:0;translate:0 -26px;transition:opacity 1s ease,translate 1.2s cubic-bezier(.2,.7,.2,1);transition-delay:calc(var(--i)*.14s)}
+.reveal .rv{opacity:1;translate:none}
+
+/* countdown — stacked like film credits */
+.count{flex:1;min-height:0;width:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:clamp(8px,1.6svh,16px)}
+.unit{display:flex;flex-direction:column;align-items:center;gap:clamp(3px,.7svh,6px)}
+.unit label{font-size:9.5px;font-weight:600;letter-spacing:.42em;margin-right:-.42em;opacity:.85}
+.digits{display:flex;font-size:clamp(30px,5.2svh,54px);font-weight:900;font-stretch:118%;font-variation-settings:'wdth' 118;
+  line-height:1;color:var(--lav);font-variant-numeric:tabular-nums;gap:.06em;
+  -webkit-mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='1.3' numOctaves='1' seed='4'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 -18 0 0 0 13.4'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23g)'/%3E%3C/svg%3E") 0 0/140px;mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='1.3' numOctaves='1' seed='4'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 -18 0 0 0 13.4'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23g)'/%3E%3C/svg%3E") 0 0/140px}
+/* frameless split-flap: no card, just the fold — top half falls, bottom half lands */
+.fl{position:relative;width:.8em;height:1.1em;perspective:3.2em}
+.fl .h{position:absolute;left:0;right:0;height:50%;overflow:hidden;backface-visibility:hidden}
+.fl .h b{position:absolute;left:0;right:0;height:200%;display:grid;place-items:center;font-weight:inherit}
+.fl .t{top:0;transform-origin:50% 100%;clip-path:inset(0 0 .025em 0)}
+.fl .t b{top:0}
+.fl .bt{bottom:0;transform-origin:50% 0;clip-path:inset(.025em 0 0 0)}
+.fl .bt b{bottom:0}
+.fl .ft,.fl .fb{visibility:hidden}
+.fl.go .ft,.fl.go .fb{visibility:visible}
+.fl.go .st{animation:fin .34s ease-in both;animation-delay:var(--d,0s)}
+.fl.go .ft{animation:ft .34s ease-in both;animation-delay:var(--d,0s)}
+.fl.go .fb{animation:fb .34s cubic-bezier(.2,.7,.3,1) both;animation-delay:calc(var(--d,0s) + .34s)}
+.fl.go .sb{animation:fout .34s linear both;animation-delay:calc(var(--d,0s) + .34s)}
+@keyframes ft{from{transform:rotateX(0)}to{transform:rotateX(-90deg);opacity:.2}}
+@keyframes fb{from{transform:rotateX(90deg);opacity:.2}to{transform:rotateX(0)}}
+@keyframes fin{from{opacity:0}}
+@keyframes fout{to{opacity:0}}
+/* poster-02 type + furniture */
+.corner{position:absolute;width:var(--cw)}
+.corner.tl{top:18px;left:14px}.corner.tr{top:18px;right:14px;transform:scaleX(-1)}
+.corner.bl{bottom:18px;left:14px;transform:scaleY(-1)}.corner.br{bottom:18px;right:14px;transform:scale(-1)}
+.hero h2{font-size:clamp(20px,6.4vw,36px);font-weight:900;font-stretch:118%;font-variation-settings:'wdth' 118;letter-spacing:.01em;line-height:1;white-space:nowrap}
+.hero h3{font-size:clamp(12px,3.8vw,20px);font-weight:800;font-stretch:118%;font-variation-settings:'wdth' 118;margin-top:6px}
+.hero h4{font-size:13px;font-weight:700;letter-spacing:.02em;margin:clamp(12px,2.4svh,24px) 0 clamp(4px,1svh,12px)}
+/* 1fr | logo | 1fr — the logo sits on the exact centre whatever the side texts' widths */
+.foot{width:100%;display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:8px;margin-top:clamp(8px,1.6svh,16px);
+  font-size:10.5px;font-weight:600;line-height:1.45;text-align:left}
+.foot p:last-child{text-align:right}
+.foot img{width:26px}
+
+@media (prefers-reduced-motion:reduce){
+  .stage,.door,.rv,.key,.night{transition-duration:.01s;transition-delay:0s}
+  .fl .h{animation-duration:.01s!important;animation-delay:0s!important}
+}
+</style>
+</head>
+<body>
+
+<section class="hero" id="hero">
+  <div class="stage">
+    <div class="door l"><img src="img/gate-l.webp" alt=""></div>
+    <div class="door r"><img src="img/gate-r.webp" alt=""></div>
+  </div>
+  <div class="night"></div>
+  <div class="grain"></div>
+
+  <button class="key" id="key" aria-label="열쇠를 눌러 대문 열기"><img src="img/key.webp?v=3" alt="" draggable="false"></button>
+
+  <img class="corner tl rv" style="--i:0" src="img/corner.webp" alt=""><img class="corner tr rv" style="--i:0" src="img/corner.webp" alt="">
+  <div class="content">
+    <h2 class="rv" style="--i:1">ONE STEP BEYOND</h2>
+    <h3 class="rv" style="--i:2">HAPPILY EVER AFTER</h3>
+    <h4 class="rv" style="--i:3">2026 GRADUATION CEREMONY</h4>
+
+    <div class="count" aria-live="off">
+      <div class="unit rv" style="--i:4"><label>DAYS</label><div class="digits" data-u="d"></div></div>
+      <div class="unit rv" style="--i:5"><label>HOURS</label><div class="digits" data-u="h"></div></div>
+      <div class="unit rv" style="--i:6"><label>MINUTES</label><div class="digits" data-u="m"></div></div>
+      <div class="unit rv" style="--i:7"><label>SECONDS</label><div class="digits" data-u="s"></div></div>
+    </div>
+
+    <div class="foot rv" style="--i:8">
+      <p>SNU COOPERATION<br>R<span class="amp">&amp;</span>D CENTER B<br>5F SQUARE HALL</p>
+      <img src="img/logo.webp" alt="Samsung Design Membership">
+      <p>NOVEMBER 25<br>WEDNESDAY<br>6:00 PM</p>
+    </div>
+  </div>
+  <img class="corner bl rv" style="--i:9" src="img/corner.webp" alt=""><img class="corner br rv" style="--i:9" src="img/corner.webp" alt="">
+</section>
+
+
+<script>
+const TARGET = new Date('2026-11-25T18:00:00+09:00').getTime();
+
+// frameless flip: static top(new) / static bottom(old) / falling flap(old top) / landing flap(new bottom)
+function digit(){
+  const el=document.createElement('span'); el.className='fl';
+  el.innerHTML='<span class="h t st"><b></b></span><span class="h bt sb"><b></b></span><span class="h t ft"><b></b></span><span class="h bt fb"><b></b></span>';
+  const [st,sb,ft,fb]=el.querySelectorAll('b'); let cur='';
+  el.addEventListener('animationend',e=>{ if(e.animationName==='fb'){ sb.textContent=ft.textContent=cur; el.classList.remove('go'); }});
+  el.set=(v,delay=0)=>{
+    if(v===cur) return;
+    ft.textContent=sb.textContent=cur; st.textContent=fb.textContent=v; cur=v;
+    el.style.setProperty('--d',delay+'s');
+    el.classList.remove('go'); void el.offsetWidth; el.classList.add('go');
+  };
+  return el;
+}
+const cards={};
+document.querySelectorAll('.digits').forEach(d=>{ cards[d.dataset.u]=[digit(),digit()]; d.append(...cards[d.dataset.u]); });
+
+let opened=false, first=true;
+function update(){
+  if(opened){
+    const s=Math.max(0,Math.floor((TARGET-Date.now())/1000));
+    const v={d:Math.min(99,Math.floor(s/86400)),h:Math.floor(s/3600)%24,m:Math.floor(s/60)%60,s:s%60};
+    let i=0;
+    for(const k in v){
+      const str=String(v[k]).padStart(2,'0'), d=first?.95+i++*.14:0;   // first reveal follows the top-down slide-in
+      cards[k][0].set(str[0],d); cards[k][1].set(str[1],d+.06);
+    }
+    first=false;
+  }
+}
+(function tick(){ update(); setTimeout(tick,1000-Date.now()%1000+5); })();
+
+const hero=document.getElementById('hero');
+document.getElementById('key').addEventListener('click',()=>{
+  if(hero.classList.contains('unlock')) return;
+  navigator.vibrate?.(25);
+  hero.classList.add('unlock');                                       // key fades, gate fades in
+  setTimeout(()=>hero.classList.add('open'),1500);                    // doors swing open
+  setTimeout(()=>{ hero.classList.add('reveal'); opened=true; update(); },3400);  // night scene settles, credits slide in
+});
+</script>
+</body>
+</html>
