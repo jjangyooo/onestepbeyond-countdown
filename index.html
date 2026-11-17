@@ -9,9 +9,10 @@
 <meta property="og:title" content="ONE STEP BEYOND — HAPPILY EVER AFTER">
 <meta property="og:description" content="2026 Graduation Ceremony · 11.25 WED 6:00 PM">
 <link rel="preload" href="img/lock-frame.webp" as="image">
-<link rel="preload" href="img/gate2-bg.webp" as="image">
-<link rel="preload" href="img/gate2-l.webp" as="image">
-<link rel="preload" href="img/gate2-r.webp" as="image">
+<link rel="preload" href="img/sky-day.webp" as="image">
+<link rel="preload" href="img/gate-l.webp" as="image">
+<link rel="preload" href="img/gate-r.webp" as="image">
+<link rel="preload" href="img/sky-night.webp" as="image">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,100..900&display=swap">
 <style>
@@ -31,29 +32,33 @@ button{font:inherit;color:inherit;background:none;border:0}
   background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .2 0 0 0 0 .2 0 0 0 0 .3 0 0 0 1.4 -.4'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
 
 /* ───────── hero ───────── */
-.hero{position:relative;height:100svh;min-height:560px;overflow:hidden;
-  background:linear-gradient(#dde2f1 0%,#dde2f1 22%,#adb6db 78%,#adb6db 100%);
+.hero{position:relative;height:100svh;min-height:560px;overflow:hidden;background:#dde2f1;
   --cw:min(28vw,14svh,140px);               /* corner ornament width */
   --lw:min(40vw,20svh,200px);               /* keyhole ornament width */
   --hy:max(50svh,280px)}                    /* vertical centre of the hero */
-/* the gate scene behind the keyhole (poster 02): sky + two gate leaves.
-   Phones show the middle of the arch; the sky/ground colours carry on above and below. */
-.stage{position:absolute;left:50%;top:50%;width:max(100%,108svh);aspect-ratio:3000/1667;translate:-50% -50%;
-  perspective:1600px;transform:scale(.84);transition:transform 1.7s cubic-bezier(.25,.6,.2,1)}
+/* scene 2 (behind the keyhole): day sky + the gate. Scene 3: the same sky at night.
+   The two skies share their cloud shapes, so the crossfade reads as one place turning to night. */
+.stage{position:absolute;inset:0;transform:scale(.86);transition:transform 1.7s cubic-bezier(.25,.6,.2,1)}
 .enter .stage{transform:none}
-.sky{position:absolute;inset:0;width:100%;height:100%;
-  -webkit-mask-image:linear-gradient(transparent,#000 12%);mask-image:linear-gradient(transparent,#000 12%)}
+.sky{position:absolute;inset:0;width:100%;height:100%;max-width:none;object-fit:cover}
+.sky.night{opacity:0;transition:opacity 1.3s ease .45s}
+.open .sky.night{opacity:1}
+/* the gate fills the height; on wide screens its cut-off sides fade into the sky */
+.gate{position:absolute;left:50%;top:0;height:100%;aspect-ratio:1600/2504;translate:-50% 0;perspective:1500px;
+  -webkit-mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent);
+          mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent);
+  transition:transform 1.35s cubic-bezier(.6,0,.85,.4)}
+@media (max-aspect-ratio:1600/2504){ .gate{-webkit-mask-image:none;mask-image:none} }
+/* the leaves open slowly, then swing away fast; the camera pushes through as they go */
 .door{position:absolute;top:0;width:50%;height:100%;will-change:transform;
-  transition:transform 2.6s cubic-bezier(.55,0,.2,1),opacity 2.2s ease .5s}
-.door img{width:100%;height:100%}
+  transition:transform 1.35s cubic-bezier(.6,0,.85,.4),opacity .5s ease .85s}
+.door img{width:100%;height:100%;max-width:none;
+  -webkit-mask-image:linear-gradient(#000 60%,rgba(0,0,0,.45));mask-image:linear-gradient(#000 60%,rgba(0,0,0,.45))}
 .door.l{left:0;transform-origin:0 50%}
 .door.r{right:0;transform-origin:100% 50%}
-.open .door.l{transform:rotateY(78deg);opacity:0}
-.open .door.r{transform:rotateY(-78deg);opacity:0}
-
-/* beyond the gate: the poster-02 night scene */
-.night{position:absolute;inset:0;background:var(--navy) url(img/navy.webp) center/cover;opacity:0;transition:opacity 1.8s ease .8s}
-.open .night{opacity:1}
+.open .gate{transform:scale(1.3)}
+.open .door.l{transform:rotateY(84deg);opacity:0}
+.open .door.r{transform:rotateY(-84deg);opacity:0}
 
 /* ───────── first screen: the lit keyhole ───────── */
 .lock{position:absolute;inset:0;z-index:5;display:block;width:100%;cursor:pointer;overflow:visible;
@@ -140,30 +145,30 @@ button{font:inherit;color:inherit;background:none;border:0}
 .enter .pool,.enter .spill{animation:none;opacity:0;transition:opacity .3s}
 
 .hero .corner{z-index:2}
-.reveal .corner.rv{opacity:.95}
-.content{position:relative;z-index:2;height:100%;display:flex;flex-direction:column;align-items:center;text-align:center;color:var(--lav);
-  padding:calc(env(safe-area-inset-top) + 18px + var(--cw)*1.134 + 8px) 28px calc(env(safe-area-inset-bottom) + 18px + var(--cw)*1.134 + 6px);
+.reveal .corner.rv{opacity:.8}
+.muted{color:#9ea3c9;font-weight:400}
+/* phones: one stacked column, venue | logo | date at the foot */
+.content{position:relative;z-index:2;height:100%;display:grid;grid-template-columns:1fr auto 1fr;column-gap:10px;
+  grid-template-areas:"t t t" "s s s" "c c c" "n n n" "m m m" "v l d";grid-template-rows:auto auto auto 1fr auto auto;
+  align-items:center;justify-items:center;text-align:center;color:var(--lav);
+  font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;
+  padding:calc(env(safe-area-inset-top) + 18px + var(--cw)*1.134 + 8px) 24px calc(env(safe-area-inset-bottom) + 18px + var(--cw)*1.134 + 6px);
   pointer-events:none}
+.content h2{grid-area:t}.content h3{grid-area:s}.content h4{grid-area:c}.count{grid-area:n}.names{grid-area:m}
+.venue{grid-area:v;justify-self:start;text-align:left}.date{grid-area:d;justify-self:end;text-align:right}.logo{grid-area:l}
 .amp{font-family:'Helvetica Neue',Helvetica,Arial,sans-serif}
 
 /* elements slide in from the top, one after another (translate keeps the corners' mirror transforms intact) */
-.rv{opacity:0;translate:0 -26px;transition:opacity 1s ease,translate 1.2s cubic-bezier(.2,.7,.2,1);transition-delay:calc(var(--i)*.14s)}
+.rv{opacity:0;translate:0 -26px;transition:opacity 1s ease,translate 1.2s cubic-bezier(.2,.7,.2,1);transition-delay:calc(var(--i)*.12s)}
 .reveal .rv{opacity:1;translate:none}
 
-/* countdown — stacked like film credits */
-.count{flex:1;min-height:0;width:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:clamp(8px,1.6svh,16px)}
-.unit{display:flex;flex-direction:column;align-items:center;gap:clamp(3px,.7svh,6px)}
-.unit label{font-size:9.5px;font-weight:600;letter-spacing:.42em;margin-right:-.42em;opacity:.85}
-.digits{display:flex;font-size:clamp(30px,5.2svh,54px);font-weight:900;font-stretch:118%;font-variation-settings:'wdth' 118;
-  line-height:1;color:var(--lav);font-variant-numeric:tabular-nums;gap:.06em;
-  -webkit-mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='1.3' numOctaves='1' seed='4'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 -18 0 0 0 13.4'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23g)'/%3E%3C/svg%3E") 0 0/140px;mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='1.3' numOctaves='1' seed='4'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 -18 0 0 0 13.4'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23g)'/%3E%3C/svg%3E") 0 0/140px}
 /* frameless split-flap: no card, just the fold — top half falls, bottom half lands */
-.fl{position:relative;width:.8em;height:1.1em;perspective:3.2em}
+.fl{position:relative;width:.57em;height:1em;perspective:3.2em}
 .fl .h{position:absolute;left:0;right:0;height:50%;overflow:hidden;backface-visibility:hidden}
 .fl .h b{position:absolute;left:0;right:0;height:200%;display:grid;place-items:center;font-weight:inherit}
-.fl .t{top:0;transform-origin:50% 100%;clip-path:inset(0 0 .025em 0)}
+.fl .t{top:0;transform-origin:50% 100%}
 .fl .t b{top:0}
-.fl .bt{bottom:0;transform-origin:50% 0;clip-path:inset(.025em 0 0 0)}
+.fl .bt{bottom:0;transform-origin:50% 0}
 .fl .bt b{bottom:0}
 .fl .ft,.fl .fb{visibility:hidden}
 .fl.go .ft,.fl.go .fb{visibility:visible}
@@ -175,21 +180,53 @@ button{font:inherit;color:inherit;background:none;border:0}
 @keyframes fb{from{transform:rotateX(90deg);opacity:.2}to{transform:rotateX(0)}}
 @keyframes fin{from{opacity:0}}
 @keyframes fout{to{opacity:0}}
-/* poster-02 type + furniture */
+/* type + furniture */
 .corner{position:absolute;width:var(--cw)}
 .corner.tl{top:18px;left:14px}.corner.tr{top:18px;right:14px;transform:scaleX(-1)}
 .corner.bl{bottom:18px;left:14px;transform:scaleY(-1)}.corner.br{bottom:18px;right:14px;transform:scale(-1)}
-.hero h2{font-size:clamp(20px,6.4vw,36px);font-weight:900;font-stretch:118%;font-variation-settings:'wdth' 118;letter-spacing:.01em;line-height:1;white-space:nowrap}
-.hero h3{font-size:clamp(12px,3.8vw,20px);font-weight:800;font-stretch:118%;font-variation-settings:'wdth' 118;margin-top:6px}
-.hero h4{font-size:13px;font-weight:700;letter-spacing:.02em;margin:clamp(12px,2.4svh,24px) 0 clamp(4px,1svh,12px)}
-/* 1fr | logo | 1fr — the logo sits on the exact centre whatever the side texts' widths */
-.foot{width:100%;display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:8px;margin-top:clamp(8px,1.6svh,16px);
-  font-size:10.5px;font-weight:600;line-height:1.45;text-align:left}
-.foot p:last-child{text-align:right}
-.foot img{width:26px}
+.hero h2{font-family:Archivo,sans-serif;font-size:clamp(20px,6.4vw,36px);font-weight:900;font-stretch:125%;font-variation-settings:'wdth' 125;letter-spacing:-.005em;line-height:1;white-space:nowrap}
+.hero h3{font-family:Archivo,sans-serif;font-size:clamp(12px,3.8vw,20px);font-weight:800;font-stretch:125%;font-variation-settings:'wdth' 125;line-height:1;margin-top:.35em}
+.hero h4{font-size:13px;font-weight:500;letter-spacing:.005em;margin-top:clamp(12px,2.4svh,24px)}
+.count{display:flex;justify-content:center;gap:clamp(12px,4.5vw,28px)}
+.unit{display:flex;flex-direction:column;align-items:center;gap:.5em}
+.unit label{font-size:10px;font-weight:500;letter-spacing:.01em}
+.digits{display:flex;font-size:clamp(34px,10vw,46px);font-weight:700;line-height:1;letter-spacing:-.01em;color:var(--lav);font-variant-numeric:tabular-nums}
+.names{font-size:8.5px;line-height:1.7;letter-spacing:.01em;max-width:340px;margin-bottom:clamp(10px,2svh,18px)}
+.names i{font-style:normal;white-space:nowrap}
+.names i:not(:last-child)::after,.names span:not(:last-child)>i:last-child::after{content:"·";margin-left:.55em}
+.names span{word-spacing:.35em}
+.names i{word-spacing:normal}
+.venue,.date{font-size:10.5px;line-height:1.4}
+.logo{width:26px}
+
+/* wide screens: the poster-03 layout, sized in --u (1/100 of a 16:9 frame that fits the screen) */
+@media (min-aspect-ratio:4/3){
+  .hero{--u:min(1vw,1.7778svh);--cw:calc(var(--u)*16.5)}
+  .corner.tl,.corner.tr{top:max(calc(50% - var(--u)*22.8),14px)}
+  .corner.bl,.corner.br{bottom:max(calc(50% - var(--u)*22.8),14px)}
+  .corner.tl,.corner.bl{left:max(calc(50% - var(--u)*44.4),14px)}
+  .corner.tr,.corner.br{right:max(calc(50% - var(--u)*44.4),14px)}
+  .content{position:absolute;left:50%;top:50%;width:calc(var(--u)*100);height:calc(var(--u)*55.55);translate:-50% -50%;
+    display:block;padding:0}
+  .content>*{position:absolute;left:0;right:0}
+  .hero h2{top:calc(var(--u)*8.95);font-size:calc(var(--u)*3.62)}
+  .hero h3{top:calc(var(--u)*13.05);font-size:calc(var(--u)*2.2);margin:0}
+  .hero h4{top:calc(var(--u)*17.45);font-size:calc(var(--u)*1.72);margin:0}
+  .venue,.date{top:calc(var(--u)*17.45);font-size:calc(var(--u)*1.42);line-height:1.24}
+  .venue{left:calc(var(--u)*12.3);right:auto}.date{right:calc(var(--u)*12.3);left:auto}
+  .count{top:calc(var(--u)*26.7);gap:0}
+  .unit{width:calc(var(--u)*12.6);gap:calc(var(--u)*1.6)}
+  .digits{font-size:calc(var(--u)*6.5)}
+  .unit label{font-size:calc(var(--u)*1.45)}
+  .names{top:calc(var(--u)*38.4);font-size:calc(var(--u)*1.12);line-height:1.3;max-width:none;margin:0;letter-spacing:0}
+  .names span{display:block}
+  .names span:not(:last-child)>i:last-child::after{content:none}
+  .logo{top:calc(var(--u)*46.8);left:50%;right:auto;width:calc(var(--u)*2.4);translate:-50% 0}
+  .reveal .logo.rv{translate:-50% 0}
+}
 
 @media (prefers-reduced-motion:reduce){
-  .stage,.door,.rv,.lock,.kh,.night{transition-duration:.01s;transition-delay:0s}
+  .stage,.gate,.door,.sky,.rv,.lock,.kh{transition-duration:.01s;transition-delay:0s}
   .fl .h{animation-duration:.01s!important;animation-delay:0s!important}
 }
 </style>
@@ -198,11 +235,13 @@ button{font:inherit;color:inherit;background:none;border:0}
 
 <section class="hero" id="hero">
   <div class="stage">
-    <img class="sky" src="img/gate2-bg.webp" alt="">
-    <div class="door l"><img src="img/gate2-l.webp" alt=""></div>
-    <div class="door r"><img src="img/gate2-r.webp" alt=""></div>
+    <img class="sky day" src="img/sky-day.webp" alt="">
+    <img class="sky night" src="img/sky-night.webp" alt="">
+    <div class="gate">
+      <div class="door l"><img src="img/gate-l.webp" alt=""></div>
+      <div class="door r"><img src="img/gate-r.webp" alt=""></div>
+    </div>
   </div>
-  <div class="night"></div>
   <div class="grain"></div>
 
   <button class="lock" id="key" aria-label="열쇠구멍을 눌러 대문 열기">
@@ -214,7 +253,7 @@ button{font:inherit;color:inherit;background:none;border:0}
         <div class="spill"></div>
       </div>
     </div>
-    <div class="lw"><div class="kh"><b></b></div><div class="ring"><i></i><i></i></div></div>
+    <div class="lw"><div class="kh"><b></b></div><div class="ring"><i></i> <i></i></div></div>
     <canvas class="dust" id="dust"></canvas>
   </button>
   <div class="sub" aria-live="polite"><p>We’ve been waiting for you.</p><p>Shall we open the door?</p>
@@ -229,19 +268,24 @@ button{font:inherit;color:inherit;background:none;border:0}
     <h2 class="rv" style="--i:1">ONE STEP BEYOND</h2>
     <h3 class="rv" style="--i:2">HAPPILY EVER AFTER</h3>
     <h4 class="rv" style="--i:3">2026 GRADUATION CEREMONY</h4>
+    <p class="venue muted rv" style="--i:3">SNU COOPERATION<br>R<span class="amp">&amp;</span>D CENTER B<br>5F SQUARE HALL</p>
+    <p class="date muted rv" style="--i:3">NOVEMBER 25, 2026<br>WEDNESDAY<br>6:00 PM</p>
 
     <div class="count" aria-live="off">
-      <div class="unit rv" style="--i:4"><label>DAYS</label><div class="digits" data-u="d"></div></div>
-      <div class="unit rv" style="--i:5"><label>HOURS</label><div class="digits" data-u="h"></div></div>
-      <div class="unit rv" style="--i:6"><label>MINUTES</label><div class="digits" data-u="m"></div></div>
-      <div class="unit rv" style="--i:7"><label>SECONDS</label><div class="digits" data-u="s"></div></div>
+      <div class="unit rv" style="--i:4"><div class="digits" data-u="d"></div><label>DAYS</label></div>
+      <div class="unit rv" style="--i:5"><div class="digits" data-u="h"></div><label>HOURS</label></div>
+      <div class="unit rv" style="--i:6"><div class="digits" data-u="m"></div><label>MINUTES</label></div>
+      <div class="unit rv" style="--i:7"><div class="digits" data-u="s"></div><label>SECONDS</label></div>
     </div>
 
-    <div class="foot rv" style="--i:8">
-      <p>SNU COOPERATION<br>R<span class="amp">&amp;</span>D CENTER B<br>5F SQUARE HALL</p>
-      <img src="img/logo.webp" alt="Samsung Design Membership">
-      <p>NOVEMBER 25<br>WEDNESDAY<br>6:00 PM</p>
-    </div>
+    <p class="names muted rv" style="--i:8">
+      <span><i>JUNHONG YANG</i> <i>JUNGMIN PARK</i> <i>SEOHUI LEE</i> <i>YUJIN JUNG</i> <i>DONGHEON KANG</i> <i>YEJI HAN</i></span>
+      <span><i>WANHYEOK CHOI</i> <i>YUBIN SEO</i> <i>MINYEONG JUNG</i> <i>JUNGMIN PARK</i></span>
+      <span><i>IIYEO LEE</i> <i>SEOHYEON CHO</i> <i>HYUNBIN SURH</i> <i>SIHEON SONG</i> <i>SEYEON PARK</i> <i>HYEONJI YANG</i></span>
+      <span><i>SEUNGHEE KIM</i> <i>DOWAN KIM</i> <i>JUEUN LEE</i> <i>SEUNGWHAN RA</i> <i>SIWOO KIM</i></span>
+      <span><i>JUNWOO LIM</i> <i>CHAEYOUNG BEAK</i> <i>JUHYEON JEON</i> <i>DOHYUN PARK</i> <i>BYEOL JANG</i></span>
+    </p>
+    <img class="logo rv" style="--i:9" src="img/logo.webp" alt="Samsung Design Membership">
   </div>
   <img class="corner bl rv" style="--i:9" src="img/corner.webp" alt=""><img class="corner br rv" style="--i:9" src="img/corner.webp" alt="">
 </section>
@@ -274,7 +318,7 @@ function update(){
     const v={d:Math.min(99,Math.floor(s/86400)),h:Math.floor(s/3600)%24,m:Math.floor(s/60)%60,s:s%60};
     let i=0;
     for(const k in v){
-      const str=String(v[k]).padStart(2,'0'), d=first?.95+i++*.14:0;   // first reveal follows the top-down slide-in
+      const str=String(v[k]).padStart(2,'0'), d=first?.5+i++*.12:0;   // first reveal follows the top-down slide-in
       cards[k][0].set(str[0],d); cards[k][1].set(str[1],d+.06);
     }
     first=false;
@@ -293,9 +337,9 @@ document.getElementById('key').addEventListener('click',()=>{
   if(hero.classList.contains('enter')) return;
   navigator.vibrate?.(25);
   hero.classList.add('enter');                                        // rush through the keyhole into the gate scene
+  setTimeout(()=>hero.classList.add('open'),850);                     // as we come through, the gate starts to part
   setTimeout(()=>hero.classList.add('done'),1300);                    // wall is gone
-  setTimeout(()=>hero.classList.add('open'),2300);                    // gate swings open
-  setTimeout(()=>{ hero.classList.add('reveal'); opened=true; update(); },4200);  // night scene settles, credits slide in
+  setTimeout(()=>{ hero.classList.add('reveal'); opened=true; update(); },2250);  // night has fallen, credits slide in
 });
 
 // dust drifting through the beam: only specks inside the light show up
