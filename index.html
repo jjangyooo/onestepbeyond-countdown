@@ -9,8 +9,9 @@
 <meta property="og:title" content="ONE STEP BEYOND — HAPPILY EVER AFTER">
 <meta property="og:description" content="2026 Graduation Ceremony · 11.25 WED 6:00 PM">
 <link rel="preload" href="img/lock-frame.webp" as="image">
-<link rel="preload" href="img/gate-l.webp" as="image">
-<link rel="preload" href="img/gate-r.webp" as="image">
+<link rel="preload" href="img/gate2-bg.webp" as="image">
+<link rel="preload" href="img/gate2-l.webp" as="image">
+<link rel="preload" href="img/gate2-r.webp" as="image">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,100..900&display=swap">
 <style>
@@ -30,20 +31,21 @@ button{font:inherit;color:inherit;background:none;border:0}
   background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .2 0 0 0 0 .2 0 0 0 0 .3 0 0 0 1.4 -.4'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
 
 /* ───────── hero ───────── */
-.hero{position:relative;height:100svh;min-height:560px;overflow:hidden;background:#fff;
-  --cw:min(28vw,14svh,140px)}               /* corner ornament width */
-/* poster-ratio stage: covers the viewport height, crops the sides on phones.
-   +0.04%: the gate's symmetry axis sits at x=1251 of 2504, so nudge it onto the exact centre */
-.stage{position:absolute;top:0;left:50%;height:100%;aspect-ratio:2504/3532;min-width:100%;
-  perspective:1400px;
-  opacity:0;filter:blur(10px);transform:translateX(calc(-50% + .04%)) scale(1.04);
-  transition:opacity 1.3s ease,filter 1.3s ease,transform 1.6s cubic-bezier(.2,.7,.2,1)}
-.unlock .stage{opacity:1;filter:none;transform:translateX(calc(-50% + .04%))}
-.door{position:absolute;top:0;width:50%;aspect-ratio:1000/2356;will-change:transform;
+.hero{position:relative;height:100svh;min-height:560px;overflow:hidden;
+  background:linear-gradient(#dde2f1 0%,#dde2f1 22%,#adb6db 78%,#adb6db 100%);
+  --cw:min(28vw,14svh,140px);               /* corner ornament width */
+  --lw:min(40vw,20svh,200px);               /* keyhole ornament width */
+  --hy:max(50svh,280px)}                    /* vertical centre of the hero */
+/* the gate scene behind the keyhole (poster 02): sky + two gate leaves.
+   Phones show the middle of the arch; the sky/ground colours carry on above and below. */
+.stage{position:absolute;left:50%;top:50%;width:max(100%,108svh);aspect-ratio:3000/1667;translate:-50% -50%;
+  perspective:1600px;transform:scale(.84);transition:transform 1.7s cubic-bezier(.25,.6,.2,1)}
+.enter .stage{transform:none}
+.sky{position:absolute;inset:0;width:100%;height:100%;
+  -webkit-mask-image:linear-gradient(transparent,#000 12%);mask-image:linear-gradient(transparent,#000 12%)}
+.door{position:absolute;top:0;width:50%;height:100%;will-change:transform;
   transition:transform 2.6s cubic-bezier(.55,0,.2,1),opacity 2.2s ease .5s}
-.door img{width:100%;height:100%;
-  -webkit-mask-image:linear-gradient(#000 48%,rgba(0,0,0,.6) 58%,rgba(0,0,0,.2) 65%,transparent 71%);
-          mask-image:linear-gradient(#000 48%,rgba(0,0,0,.6) 58%,rgba(0,0,0,.2) 65%,transparent 71%)}
+.door img{width:100%;height:100%}
 .door.l{left:0;transform-origin:0 50%}
 .door.r{right:0;transform-origin:100% 50%}
 .open .door.l{transform:rotateY(78deg);opacity:0}
@@ -55,14 +57,23 @@ button{font:inherit;color:inherit;background:none;border:0}
 
 /* ───────── first screen: the lit keyhole ───────── */
 .lock{position:absolute;inset:0;z-index:5;display:block;width:100%;cursor:pointer;overflow:hidden;
-  -webkit-tap-highlight-color:transparent;
+  -webkit-tap-highlight-color:transparent;will-change:transform;
+  /* punch the keyhole out of the wall so the gate scene shows through it */
+  -webkit-mask-image:url(img/keyhole.png),linear-gradient(#000 0 0);mask-image:url(img/keyhole.png),linear-gradient(#000 0 0);
+  -webkit-mask-repeat:no-repeat;mask-repeat:no-repeat;
+  -webkit-mask-position:calc(50vw - var(--lw)*.118) calc(var(--hy) - var(--lw)*.3337),0 0;
+          mask-position:calc(50vw - var(--lw)*.118) calc(var(--hy) - var(--lw)*.3337),0 0;
+  -webkit-mask-size:calc(var(--lw)*.236) calc(var(--lw)*.4787),100% 100%;
+          mask-size:calc(var(--lw)*.236) calc(var(--lw)*.4787),100% 100%;
+  -webkit-mask-composite:xor;mask-composite:exclude;
+  transform-origin:50% calc(var(--hy) - var(--lw)*.0945);   /* keyhole centre */
+  transition:transform 1.25s cubic-bezier(.62,0,.88,.3);
   background:radial-gradient(120% 90% at 50% 46%,#40425f 0%,#363853 40%,#25263a 100%);
-  transition:opacity 1.1s ease}
+}
 .lock .grain{opacity:.16}
-.done .lock{opacity:0;pointer-events:none}
+.done .lock{visibility:hidden}
 /* the ornament box: the keyhole's light is positioned in its coordinates (from the 610×1163 artwork) */
-.lw{position:absolute;left:50%;top:50%;width:min(40vw,20svh,200px);aspect-ratio:610/1163;translate:-50% -50%;
-  transform-origin:50% 45%;transition:transform 1.6s cubic-bezier(.7,0,.25,1)}
+.lw{position:absolute;left:50%;top:var(--hy);width:var(--lw);aspect-ratio:610/1163;translate:-50% -50%}
 .lw>*{position:absolute}
 /* soft pool of light the keyhole throws onto the wall */
 .pool{left:50%;top:45%;width:115%;aspect-ratio:.8;translate:-50% -50%;border-radius:50%;
@@ -75,9 +86,8 @@ button{font:inherit;color:inherit;background:none;border:0}
 .frame{inset:0;width:100%;height:100%}
 /* the keyhole itself: an opening onto a white, light-filled room */
 .kh{left:38.2%;top:32.5%;width:23.6%;height:25.1%;
-  filter:drop-shadow(0 0 3px rgba(240,244,255,.9)) drop-shadow(0 0 12px rgba(200,212,255,.55)) drop-shadow(0 0 28px rgba(160,178,255,.25));
-  animation:breathe 4.2s ease-in-out infinite}
-.kh b{position:absolute;inset:0;
+  filter:drop-shadow(0 0 3px rgba(240,244,255,.9)) drop-shadow(0 0 12px rgba(200,212,255,.55)) drop-shadow(0 0 28px rgba(160,178,255,.25))}
+.kh b{position:absolute;inset:0;animation:breathe 4.2s ease-in-out infinite;
   -webkit-mask:url(img/keyhole.png) center/100% 100% no-repeat;mask:url(img/keyhole.png) center/100% 100% no-repeat;
   background:
     radial-gradient(60% 30% at 50% 26%,#fff 30%,transparent 100%),
@@ -90,10 +100,10 @@ button{font:inherit;color:inherit;background:none;border:0}
 @keyframes breathe{50%{opacity:.82}}
 @keyframes flick{0%,100%{opacity:1}45%{opacity:.6}55%{opacity:.9}}
 @keyframes spin{to{rotate:360deg}}
-/* tap: dive into the keyhole until the light swallows the screen */
-.enter .lw{transform:scale(28)}
-.enter .flash{position:absolute;inset:0;background:#fff;opacity:0;pointer-events:none;transition:opacity .7s ease .85s}
-.enter .flash{opacity:1}
+/* tap: rush through the keyhole — the light veil lifts and the gate scene beyond fills the screen */
+.enter .lock{transform:scale(44)}
+.enter .kh{opacity:0;transition:opacity .35s ease .32s}
+.enter .pool,.enter .spill{animation:none;opacity:0;transition:opacity .3s}
 
 .hero .corner{z-index:2}
 .reveal .corner.rv{opacity:.95}
@@ -145,7 +155,7 @@ button{font:inherit;color:inherit;background:none;border:0}
 .foot img{width:26px}
 
 @media (prefers-reduced-motion:reduce){
-  .stage,.door,.rv,.lock,.lw,.flash,.night{transition-duration:.01s;transition-delay:0s}
+  .stage,.door,.rv,.lock,.kh,.night{transition-duration:.01s;transition-delay:0s}
   .fl .h{animation-duration:.01s!important;animation-delay:0s!important}
 }
 </style>
@@ -154,8 +164,9 @@ button{font:inherit;color:inherit;background:none;border:0}
 
 <section class="hero" id="hero">
   <div class="stage">
-    <div class="door l"><img src="img/gate-l.webp" alt=""></div>
-    <div class="door r"><img src="img/gate-r.webp" alt=""></div>
+    <img class="sky" src="img/gate2-bg.webp" alt="">
+    <div class="door l"><img src="img/gate2-l.webp" alt=""></div>
+    <div class="door r"><img src="img/gate2-r.webp" alt=""></div>
   </div>
   <div class="night"></div>
   <div class="grain"></div>
@@ -169,7 +180,6 @@ button{font:inherit;color:inherit;background:none;border:0}
       <div class="kh"><b></b></div>
     </div>
     <canvas class="dust" id="dust"></canvas>
-    <div class="flash"></div>
   </button>
 
   <img class="corner tl rv" style="--i:0" src="img/corner.webp" alt=""><img class="corner tr rv" style="--i:0" src="img/corner.webp" alt="">
@@ -234,10 +244,10 @@ const hero=document.getElementById('hero');
 document.getElementById('key').addEventListener('click',()=>{
   if(hero.classList.contains('enter')) return;
   navigator.vibrate?.(25);
-  hero.classList.add('enter');                                        // dive into the keyhole, light floods the screen
-  setTimeout(()=>hero.classList.add('unlock','done'),1500);          // white settles into the gate
-  setTimeout(()=>hero.classList.add('open'),3000);                    // doors swing open
-  setTimeout(()=>{ hero.classList.add('reveal'); opened=true; update(); },4900);  // night scene settles, credits slide in
+  hero.classList.add('enter');                                        // rush through the keyhole into the gate scene
+  setTimeout(()=>hero.classList.add('done'),1300);                    // wall is gone
+  setTimeout(()=>hero.classList.add('open'),2300);                    // gate swings open
+  setTimeout(()=>{ hero.classList.add('reveal'); opened=true; update(); },4200);  // night scene settles, credits slide in
 });
 
 // dust drifting through the beam: only specks inside the light show up
