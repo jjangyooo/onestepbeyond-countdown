@@ -56,9 +56,13 @@ button{font:inherit;color:inherit;background:none;border:0}
 .open .night{opacity:1}
 
 /* ───────── first screen: the lit keyhole ───────── */
-.lock{position:absolute;inset:0;z-index:5;display:block;width:100%;cursor:pointer;overflow:hidden;
+.lock{position:absolute;inset:0;z-index:5;display:block;width:100%;cursor:pointer;overflow:visible;
   -webkit-tap-highlight-color:transparent;will-change:transform;
-  /* punch the keyhole out of the wall so the gate scene shows through it */
+  transform-origin:50% calc(var(--hy) - var(--lw)*.0945);   /* keyhole centre */
+  transition:transform 1.25s cubic-bezier(.62,0,.88,.3)}
+/* the wall, with the keyhole punched out of it so the gate scene shows through.
+   The lit veil sits outside this masked layer so it never gets cut away with the hole. */
+.wall{position:absolute;inset:0;
   -webkit-mask-image:url(img/keyhole.png),linear-gradient(#000 0 0);mask-image:url(img/keyhole.png),linear-gradient(#000 0 0);
   -webkit-mask-repeat:no-repeat;mask-repeat:no-repeat;
   -webkit-mask-position:calc(50vw - var(--lw)*.118) calc(var(--hy) - var(--lw)*.3337),0 0;
@@ -66,11 +70,9 @@ button{font:inherit;color:inherit;background:none;border:0}
   -webkit-mask-size:calc(var(--lw)*.236) calc(var(--lw)*.4787),100% 100%;
           mask-size:calc(var(--lw)*.236) calc(var(--lw)*.4787),100% 100%;
   -webkit-mask-composite:xor;mask-composite:exclude;
-  transform-origin:50% calc(var(--hy) - var(--lw)*.0945);   /* keyhole centre */
-  transition:transform 1.25s cubic-bezier(.62,0,.88,.3);
   background:radial-gradient(120% 90% at 50% 46%,#40425f 0%,#363853 40%,#25263a 100%);
 }
-.lock .grain{opacity:.16}
+.wall .grain{opacity:.16}
 .done .lock{visibility:hidden}
 /* the ornament box: the keyhole's light is positioned in its coordinates (from the 610×1163 artwork) */
 .lw{position:absolute;left:50%;top:var(--hy);width:var(--lw);aspect-ratio:610/1163;translate:-50% -50%}
@@ -172,13 +174,15 @@ button{font:inherit;color:inherit;background:none;border:0}
   <div class="grain"></div>
 
   <button class="lock" id="key" aria-label="열쇠구멍을 눌러 대문 열기">
-    <div class="grain"></div>
-    <div class="lw">
-      <div class="pool"></div>
-      <img class="frame" src="img/lock-frame.webp" alt="" draggable="false">
-      <div class="spill"></div>
-      <div class="kh"><b></b></div>
+    <div class="wall">
+      <div class="grain"></div>
+      <div class="lw">
+        <div class="pool"></div>
+        <img class="frame" src="img/lock-frame.webp" alt="" draggable="false">
+        <div class="spill"></div>
+      </div>
     </div>
+    <div class="lw"><div class="kh"><b></b></div></div>
     <canvas class="dust" id="dust"></canvas>
   </button>
 
