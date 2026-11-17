@@ -284,12 +284,11 @@ function update(){
 
 const hero=document.getElementById('hero');
 
-// opening dialogue: two subtitle cues, then a nudge if nobody has tapped 5s after the last line
+// opening dialogue: two subtitle cues; the tap nudge comes up with the second line
 const lines=document.querySelectorAll('.sub p'), nudge=document.querySelector('.nudge');
 const cue=(fn,ms)=>setTimeout(()=>{ if(!hero.classList.contains('enter')) fn(); },ms);
 cue(()=>lines[0].classList.add('on'),1200);
-cue(()=>lines[1].classList.add('on'),3400);
-cue(()=>{ nudge.classList.add('on'); hero.classList.add('nudging'); },3400+5000);
+cue(()=>{ lines[1].classList.add('on'); nudge.classList.add('on'); hero.classList.add('nudging'); },2200);
 document.getElementById('key').addEventListener('click',()=>{
   if(hero.classList.contains('enter')) return;
   navigator.vibrate?.(25);
