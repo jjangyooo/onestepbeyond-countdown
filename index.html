@@ -65,31 +65,26 @@ button{font:inherit;color:inherit;background:none;border:0}
   transform-origin:50% 45%;transition:transform 1.6s cubic-bezier(.7,0,.25,1)}
 .lw>*{position:absolute}
 /* soft pool of light the keyhole throws onto the wall */
-.pool{left:50%;top:45%;width:520%;aspect-ratio:1;translate:-50% -50%;border-radius:50%;
-  background:radial-gradient(closest-side,rgba(190,202,255,.26),rgba(150,165,230,.08) 35%,transparent 80%);
+.pool{left:50%;top:45%;width:115%;aspect-ratio:.8;translate:-50% -50%;border-radius:50%;
+  background:radial-gradient(closest-side,rgba(200,210,255,.22),rgba(160,175,240,.07) 55%,transparent);
   animation:breathe 4.2s ease-in-out infinite}
+/* light falling out of the opening onto the ground below, fading fast */
+.spill{left:38.2%;top:57.4%;width:23.6%;height:9%;transform-origin:50% 0;
+  background:linear-gradient(rgba(215,224,255,.32),rgba(190,202,255,.08) 55%,transparent);
+  clip-path:polygon(0 0,100% 0,128% 100%,-28% 100%);filter:blur(3px);animation:breathe 4.2s ease-in-out infinite}
 .frame{inset:0;width:100%;height:100%}
-/* god rays streaming out of the keyhole, over the wall and the ironwork */
-.rays{left:50%;top:45%;width:900%;aspect-ratio:1;translate:-50% -50%;mix-blend-mode:screen;pointer-events:none;
-  -webkit-mask:radial-gradient(closest-side,#000 2%,rgba(0,0,0,.55) 22%,transparent 72%);
-          mask:radial-gradient(closest-side,#000 2%,rgba(0,0,0,.45) 18%,transparent 60%)}
-.rays i{position:absolute;inset:0;border-radius:50%;filter:blur(5px)}
-.rays i:nth-child(1){background:repeating-conic-gradient(from 0deg,rgba(215,225,255,.15) 0deg 1.6deg,transparent 2.4deg 9deg,rgba(200,212,255,.10) 9.6deg 11deg,transparent 12deg 17deg);
-  animation:spin 140s linear infinite}
-.rays i:nth-child(2){background:repeating-conic-gradient(from 5deg,rgba(225,232,255,.14) 0deg 3deg,transparent 4.5deg 23deg);
-  animation:spin 200s linear infinite reverse,flick 5s ease-in-out infinite}
 /* the keyhole itself: an opening onto a white, light-filled room */
 .kh{left:38.2%;top:32.5%;width:23.6%;height:25.1%;
-  filter:drop-shadow(0 0 8px rgba(235,240,255,.9)) drop-shadow(0 0 26px rgba(170,190,255,.75)) drop-shadow(0 0 60px rgba(140,160,255,.45));
+  filter:drop-shadow(0 0 3px rgba(240,244,255,.9)) drop-shadow(0 0 12px rgba(200,212,255,.55)) drop-shadow(0 0 28px rgba(160,178,255,.25));
   animation:breathe 4.2s ease-in-out infinite}
 .kh b{position:absolute;inset:0;
   -webkit-mask:url(img/keyhole.png) center/100% 100% no-repeat;mask:url(img/keyhole.png) center/100% 100% no-repeat;
   background:
     radial-gradient(60% 30% at 50% 26%,#fff 30%,transparent 100%),
-    linear-gradient(#fff 0%,#f6f8ff 45%,#e3e9ff 78%,#cdd6fb 100%)}
+    linear-gradient(#fff 0%,#fbfcff 55%,#eef2ff 100%)}
 /* a sliver of the floor inside, catching the light — reads as depth beyond the hole */
 .kh b::after{content:"";position:absolute;left:0;right:0;bottom:0;height:34%;
-  background:linear-gradient(transparent,rgba(170,186,240,.22));}
+  background:linear-gradient(transparent,rgba(180,195,245,.14));}
 /* dust caught in the light */
 .dust{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;mix-blend-mode:screen}
 @keyframes breathe{50%{opacity:.82}}
@@ -170,7 +165,7 @@ button{font:inherit;color:inherit;background:none;border:0}
     <div class="lw">
       <div class="pool"></div>
       <img class="frame" src="img/lock-frame.webp" alt="" draggable="false">
-      <div class="rays"><i></i><i></i></div>
+      <div class="spill"></div>
       <div class="kh"><b></b></div>
     </div>
     <canvas class="dust" id="dust"></canvas>
@@ -252,16 +247,16 @@ document.getElementById('key').addEventListener('click',()=>{
   let W,H,dpr,cx,cy,R; const P=[];
   function size(){
     dpr=Math.min(2,devicePixelRatio||1); W=cv.clientWidth; H=cv.clientHeight; cv.width=W*dpr; cv.height=H*dpr;
-    const r=kh.getBoundingClientRect(), c=cv.getBoundingClientRect(); cx=r.left-c.left+r.width/2; cy=r.top-c.top+r.height*.45; R=Math.max(W,H)*.55;
+    const r=kh.getBoundingClientRect(), c=cv.getBoundingClientRect(); cx=r.left-c.left+r.width/2; cy=r.top-c.top+r.height*.45; R=r.width*2.6;
   }
   function spawn(p,init){
     const a=Math.random()*Math.PI*2, d=Math.pow(Math.random(),1.6)*R*(init?1:.25);
-    p.x=cx+Math.cos(a)*d; p.y=cy+Math.sin(a)*d; p.r=.4+Math.random()*1.4;
-    const sp=.05+Math.random()*.22; p.vx=Math.cos(a)*sp+(Math.random()-.5)*.08; p.vy=Math.sin(a)*sp-.04;
+    p.x=cx+Math.cos(a)*d; p.y=cy+Math.sin(a)*d; p.r=.3+Math.random()*.9;
+    const sp=.02+Math.random()*.08; p.vx=Math.cos(a)*sp+(Math.random()-.5)*.08; p.vy=Math.sin(a)*sp-.04;
     p.t=Math.random()*6.28; p.life=0;
   }
   size(); addEventListener('resize',size);
-  for(let i=0;i<90;i++){const p={};spawn(p,true);P.push(p);}
+  for(let i=0;i<34;i++){const p={};spawn(p,true);P.push(p);}
   (function loop(){
     if(hero.classList.contains('done')) return;
     ctx.setTransform(dpr,0,0,dpr,0,0); ctx.clearRect(0,0,W,H);
