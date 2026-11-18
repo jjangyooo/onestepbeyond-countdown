@@ -8,11 +8,11 @@
 <meta name="description" content="2026 Graduation Ceremony · November 25 Wednesday 6:00 PM · SNU Cooperation R&D Center B 5F Square Hall">
 <meta property="og:title" content="ONE STEP BEYOND — HAPPILY EVER AFTER">
 <meta property="og:description" content="2026 Graduation Ceremony · 11.25 WED 6:00 PM">
-<link rel="preload" href="img/lock-frame.webp" as="image">
-<link rel="preload" href="img/sky-day.webp" as="image">
-<link rel="preload" href="img/gate-l.webp" as="image">
-<link rel="preload" href="img/gate-r.webp" as="image">
-<link rel="preload" href="img/sky-night.webp" as="image">
+<link rel="preload" href="img/lock-frame.webp?v=25" as="image">
+<link rel="preload" href="img/sky-day.webp?v=25" as="image">
+<link rel="preload" href="img/gate-l.webp?v=25" as="image">
+<link rel="preload" href="img/gate-r.webp?v=25" as="image">
+<link rel="preload" href="img/sky-night.webp?v=25" as="image">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,100..900&display=swap">
 <style>
@@ -28,7 +28,7 @@ img{display:block;max-width:100%;user-select:none;-webkit-user-drag:none}
 button{font:inherit;color:inherit;background:none;border:0}
 
 /* film grain (poster texture) */
-.grain{position:absolute;inset:0;pointer-events:none;opacity:.22;background:url(img/grain.png) 0 0/160px}
+.grain{position:absolute;inset:0;pointer-events:none;opacity:.22;background:url(img/grain.png?v=25) 0 0/160px}
 
 /* ───────── hero ───────── */
 .hero{position:relative;height:100svh;min-height:560px;overflow:hidden;background:#dde2f1;
@@ -55,7 +55,7 @@ button{font:inherit;color:inherit;background:none;border:0}
   background:linear-gradient(rgba(250,251,255,0),#fff 10svh,#f4f6ff 70%,#e6e9fb)}
 .open .light{opacity:1}
 .halo{position:absolute;left:50%;top:0;bottom:0;width:0;translate:-50% 0;pointer-events:none;opacity:0;
-  background:linear-gradient(90deg,rgba(255,255,255,0),rgba(255,255,255,.55) 30%,rgba(255,255,255,.55) 70%,rgba(255,255,255,0))}
+  background:linear-gradient(90deg,rgba(255,255,255,0),rgba(255,255,255,.3) 35%,rgba(255,255,255,.3) 65%,rgba(255,255,255,0))}
 /* the light floods the screen, then dims to reveal the night beyond */
 .flood{position:absolute;inset:0;z-index:1;background:#fbfbff;opacity:0;pointer-events:none}
 .done2 .front{visibility:hidden}
@@ -78,7 +78,7 @@ button{font:inherit;color:inherit;background:none;border:0}
 /* the wall, with the keyhole punched out of it so the gate scene shows through.
    The lit veil sits outside this masked layer so it never gets cut away with the hole. */
 .wall{position:absolute;inset:0;
-  -webkit-mask-image:url(img/keyhole.png),linear-gradient(#000 0 0);mask-image:url(img/keyhole.png),linear-gradient(#000 0 0);
+  -webkit-mask-image:url(img/keyhole.png?v=25),linear-gradient(#000 0 0);mask-image:url(img/keyhole.png?v=25),linear-gradient(#000 0 0);
   -webkit-mask-repeat:no-repeat;mask-repeat:no-repeat;
   -webkit-mask-position:calc(50vw - var(--lw)*.118) calc(var(--hy) - var(--lw)*.3337),0 0;
           mask-position:calc(50vw - var(--lw)*.118) calc(var(--hy) - var(--lw)*.3337),0 0;
@@ -105,7 +105,7 @@ button{font:inherit;color:inherit;background:none;border:0}
 .kh{left:38.2%;top:32.5%;width:23.6%;height:25.1%;
   filter:drop-shadow(0 0 3px rgba(240,244,255,.9)) drop-shadow(0 0 12px rgba(200,212,255,.55)) drop-shadow(0 0 28px rgba(160,178,255,.25))}
 .kh b{position:absolute;inset:0;animation:breathe 4.2s ease-in-out infinite;
-  -webkit-mask:url(img/keyhole.png) center/100% 100% no-repeat;mask:url(img/keyhole.png) center/100% 100% no-repeat;
+  -webkit-mask:url(img/keyhole.png?v=25) center/100% 100% no-repeat;mask:url(img/keyhole.png?v=25) center/100% 100% no-repeat;
   background:
     radial-gradient(60% 30% at 50% 26%,#fff 30%,transparent 100%),
     linear-gradient(#fff 0%,#fbfcff 55%,#eef2ff 100%)}
@@ -247,13 +247,13 @@ button{font:inherit;color:inherit;background:none;border:0}
 
 <section class="hero" id="hero">
   <div class="stage">
-    <img class="sky night" src="img/sky-night.webp" alt="">
+    <img class="sky night" src="img/sky-night.webp?v=25" alt="">
     <div class="front">
-      <img class="sky day" src="img/sky-day.webp" alt="">
+      <img class="sky day" src="img/sky-day.webp?v=25" alt="">
       <div class="light"></div>
       <div class="scene"><div class="gate">
-        <div class="door l"><img src="img/gate-l.webp" alt=""></div>
-        <div class="door r"><img src="img/gate-r.webp" alt=""></div>
+        <div class="door l"><img src="img/gate-l.webp?v=25" alt=""></div>
+        <div class="door r"><img src="img/gate-r.webp?v=25" alt=""></div>
       </div></div>
       <div class="halo"></div>
     </div>
@@ -267,7 +267,7 @@ button{font:inherit;color:inherit;background:none;border:0}
   <div class="flood"></div>
       <div class="lw">
         <div class="pool"></div>
-        <img class="frame" src="img/lock-frame.webp" alt="" draggable="false">
+        <img class="frame" src="img/lock-frame.webp?v=25" alt="" draggable="false">
         <div class="spill"></div>
       </div>
     </div>
@@ -281,7 +281,7 @@ button{font:inherit;color:inherit;background:none;border:0}
     </div>
   </div>
 
-  <img class="corner tl rv" style="--i:0" src="img/corner.webp" alt=""><img class="corner tr rv" style="--i:0" src="img/corner.webp" alt="">
+  <img class="corner tl rv" style="--i:0" src="img/corner.webp?v=25" alt=""><img class="corner tr rv" style="--i:0" src="img/corner.webp?v=25" alt="">
   <div class="content">
     <h2 class="rv" style="--i:1">ONE STEP BEYOND</h2>
     <h3 class="rv" style="--i:2">HAPPILY EVER AFTER</h3>
@@ -303,9 +303,9 @@ button{font:inherit;color:inherit;background:none;border:0}
       <span><i>SEUNGHEE KIM</i> <i>DOWAN KIM</i> <i>JUEUN LEE</i> <i>SEUNGWHAN RA</i> <i>SIWOO KIM</i></span>
       <span><i>JUNWOO LIM</i> <i>CHAEYOUNG BEAK</i> <i>JUHYEON JEON</i> <i>DOHYUN PARK</i> <i>BYEOL JANG</i></span>
     </p>
-    <img class="logo rv" style="--i:9" src="img/logo.webp" alt="Samsung Design Membership">
+    <img class="logo rv" style="--i:9" src="img/logo.webp?v=25" alt="Samsung Design Membership">
   </div>
-  <img class="corner bl rv" style="--i:9" src="img/corner.webp" alt=""><img class="corner br rv" style="--i:9" src="img/corner.webp" alt="">
+  <img class="corner bl rv" style="--i:9" src="img/corner.webp?v=25" alt=""><img class="corner br rv" style="--i:9" src="img/corner.webp?v=25" alt="">
 </section>
 
 
@@ -383,7 +383,7 @@ function openGate(){
     lit.style.left=(W/2-gap).toFixed(1)+'px'; lit.style.width=(gap*2).toFixed(1)+'px';
     lit.style.top=y.toFixed(1)+'px'; lit.style.height=Math.max(0,H-y).toFixed(1)+'px';
     // halo spilling over the leaves' edges, growing as the gap does
-    halo.style.width=(gap*2+140).toFixed(1)+'px'; halo.style.top=(top+fh*.3).toFixed(1)+'px';
+    halo.style.width=(gap*2+50).toFixed(1)+'px'; halo.style.top=(top+fh*.3).toFixed(1)+'px';
     halo.style.opacity=Math.min(1,gap/40).toFixed(3);
     // the last stretch: the light swallows everything
     flood.style.opacity=(t<.5?0:Math.pow((t-.5)/.5,1.6)).toFixed(3);
