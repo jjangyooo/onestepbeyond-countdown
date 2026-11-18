@@ -34,9 +34,9 @@ button{font:inherit;color:inherit;background:none;border:0}
 .hero{position:relative;height:100svh;min-height:560px;overflow:hidden;background:#dde2f1;
   --cw:min(28vw,14svh,140px);               /* corner ornament width */
   --lw:min(40vw,20svh,200px);               /* keyhole ornament width */
-  /* keyhole centre: raised so ornament + subtitle + nudge sit together as one centred group
-     (half of: gap under the ornament + two subtitle lines + the nudge ≈ 105px) */
-  --hy:max(calc(50svh - (clamp(28px,7svh,90px) + 105px)/2),230px)}
+  /* keyhole centre: raised a little (a quarter of the subtitle block's height) so the
+     ornament + subtitle group sits slightly above true centre */
+  --hy:max(calc(50svh - (clamp(28px,7svh,90px) + 105px)/4),255px)}
 /* scene 2 (behind the keyhole): day sky + the gate, on a "front" layer.
    Scene 3 (night) waits behind it and is seen only through the gap between the opening leaves;
    as the leaves swing toward us and the camera pushes in, that gap widens until night fills the screen. */
