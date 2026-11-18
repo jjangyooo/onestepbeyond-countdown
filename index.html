@@ -63,8 +63,8 @@ button{font:inherit;color:inherit;background:none;border:0}
    gate's arch spans, spire ~17% down; the bars sink into the mist toward the bottom */
 .scene{position:absolute;left:50%;top:50%;width:max(100%,108svh);aspect-ratio:2576/1431;translate:-50% -50%}   /* fade is baked into the leaf images */
 /* the leaves swing toward us (driven frame by frame in JS so the gap tracks their inner edges) */
-.gate{position:absolute;left:0;top:-8.1%;width:100%;aspect-ratio:1600/2504;perspective:1500px;perspective-origin:50% 21%;
-  transform-origin:50% 21%}
+.gate{position:absolute;left:0;top:-8.1%;width:100%;aspect-ratio:1600/1201;perspective:1500px;perspective-origin:50% 43.75%;
+  transform-origin:50% 43.75%}
 .door{position:absolute;top:0;width:50%;height:100%;will-change:transform}
 .door img{width:100%;height:100%;max-width:none}
 .door.l{left:0;transform-origin:0 50%}
@@ -74,7 +74,7 @@ button{font:inherit;color:inherit;background:none;border:0}
 .lock{position:absolute;inset:0;z-index:5;display:block;width:100%;cursor:pointer;overflow:visible;
   -webkit-tap-highlight-color:transparent;will-change:transform;
   transform-origin:50% calc(var(--hy) - var(--lw)*.0945);   /* keyhole centre */
-  transition:transform 1.25s cubic-bezier(.62,0,.88,.3),opacity .3s ease .95s}
+  transition:transform 1.25s cubic-bezier(.62,0,.88,.3),opacity .26s linear .84s}
 /* the wall, with the keyhole punched out of it so the gate scene shows through.
    The lit veil sits outside this masked layer so it never gets cut away with the hole. */
 .wall{position:absolute;inset:0;
@@ -88,7 +88,7 @@ button{font:inherit;color:inherit;background:none;border:0}
   background:radial-gradient(120% 90% at 50% 46%,#40425f 0%,#363853 40%,#25263a 100%);
 }
 .wall .grain{opacity:.16}
-.done .lock{visibility:hidden}
+.done .lock{display:none}   /* removed just before the zoom ends, so the browser never re-draws a 44x wall */
 /* the ornament box: the keyhole's light is positioned in its coordinates (from the 610×1163 artwork) */
 .lw{position:absolute;left:50%;top:var(--hy);width:var(--lw);aspect-ratio:610/1163;translate:-50% -50%}
 .lw>*{position:absolute}
@@ -356,7 +356,7 @@ document.getElementById('key').addEventListener('click',()=>{
   navigator.vibrate?.(25);
   hero.classList.add('enter');                                        // rush through the keyhole into the gate scene
   setTimeout(openGate,850);                                           // as we come through, the gate starts to part
-  setTimeout(()=>hero.classList.add('done'),1300);                    // wall is gone
+  setTimeout(()=>hero.classList.add('done'),1120);                    // wall is gone (before its zoom settles)
   setTimeout(()=>{ hero.classList.add('reveal'); opened=true; update(); },3050);  // night has fallen, credits slide in
 });
 
@@ -378,7 +378,7 @@ function openGate(){
     // light shows only inside the gateway: between the inner edges, below the gate's top
     const gap=Math.max(0,-xp*sc);
     const k=front.getBoundingClientRect().width/front.offsetWidth||1, g=gate.getBoundingClientRect(), f=front.getBoundingClientRect();
-    const top=(g.top-f.top)/k + g.height/k*.088, fh=front.offsetHeight*.1;
+    const top=(g.top-f.top)/k + g.height/k*.1833, fh=front.offsetHeight*.1;
     const W=front.offsetWidth, H=front.offsetHeight, y=Math.max(0,top);
     lit.style.left=(W/2-gap).toFixed(1)+'px'; lit.style.width=(gap*2).toFixed(1)+'px';
     lit.style.top=y.toFixed(1)+'px'; lit.style.height=Math.max(0,H-y).toFixed(1)+'px';
