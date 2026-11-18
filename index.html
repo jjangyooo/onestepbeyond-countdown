@@ -28,8 +28,7 @@ img{display:block;max-width:100%;user-select:none;-webkit-user-drag:none}
 button{font:inherit;color:inherit;background:none;border:0}
 
 /* film grain (poster texture) */
-.grain{position:absolute;inset:0;pointer-events:none;opacity:.22;mix-blend-mode:multiply;
-  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .2 0 0 0 0 .2 0 0 0 0 .3 0 0 0 1.4 -.4'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+.grain{position:absolute;inset:0;pointer-events:none;opacity:.22;background:url(img/grain.png) 0 0/160px}
 
 /* ───────── hero ───────── */
 .hero{position:relative;height:100svh;min-height:560px;overflow:hidden;background:#dde2f1;
@@ -49,22 +48,20 @@ button{font:inherit;color:inherit;background:none;border:0}
 .sky.night{visibility:hidden}
 .done2 .sky.night{visibility:visible}
 /* everything in front of the gateway (day sky + gate). No masks here, so the 3D leaves stay intact. */
-.front{position:absolute;inset:0;transform:translateZ(0);isolation:isolate}
+.front{position:absolute;inset:0}
 /* light pouring through the gateway: a plain box between the day sky and the gate whose position and
    size JS sets each frame to the opening between the leaves (no masks, so every browser draws it the same) */
 .light{position:absolute;left:50%;top:0;width:0;height:0;opacity:0;
   background:linear-gradient(rgba(250,251,255,0),#fff 10svh,#f4f6ff 70%,#e6e9fb)}
 .open .light{opacity:1}
 .halo{position:absolute;left:50%;top:0;bottom:0;width:0;translate:-50% 0;pointer-events:none;opacity:0;
-  background:linear-gradient(rgba(255,255,255,0),rgba(255,255,255,.9) 18%,rgba(245,247,255,.9));filter:blur(26px);mix-blend-mode:screen}
+  background:linear-gradient(90deg,rgba(255,255,255,0),rgba(255,255,255,.55) 30%,rgba(255,255,255,.55) 70%,rgba(255,255,255,0))}
 /* the light floods the screen, then dims to reveal the night beyond */
 .flood{position:absolute;inset:0;z-index:1;background:#fbfbff;opacity:0;pointer-events:none}
 .done2 .front{visibility:hidden}
 /* poster-02 framing: a 16:9 frame (cover on wide screens, centred on phones) whose width the
    gate's arch spans, spire ~17% down; the bars sink into the mist toward the bottom */
-.scene{position:absolute;left:50%;top:50%;width:max(100%,108svh);aspect-ratio:2576/1431;translate:-50% -50%;
-  -webkit-mask-image:linear-gradient(#000 66%,rgba(0,0,0,.38));mask-image:linear-gradient(#000 66%,rgba(0,0,0,.38))}
-@media (max-aspect-ratio:1/1){ .scene{-webkit-mask-image:linear-gradient(#000 60%,transparent);mask-image:linear-gradient(#000 60%,transparent)} }
+.scene{position:absolute;left:50%;top:50%;width:max(100%,108svh);aspect-ratio:2576/1431;translate:-50% -50%}   /* fade is baked into the leaf images */
 /* the leaves swing toward us (driven frame by frame in JS so the gap tracks their inner edges) */
 .gate{position:absolute;left:0;top:-8.1%;width:100%;aspect-ratio:1600/2504;perspective:1500px;perspective-origin:50% 21%;
   transform-origin:50% 21%}
@@ -116,7 +113,7 @@ button{font:inherit;color:inherit;background:none;border:0}
 .kh b::after{content:"";position:absolute;left:0;right:0;bottom:0;height:34%;
   background:linear-gradient(transparent,rgba(180,195,245,.14));}
 /* dust caught in the light */
-.dust{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;mix-blend-mode:screen}
+.dust{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
 @keyframes breathe{50%{opacity:.82}}
 @keyframes flick{0%,100%{opacity:1}45%{opacity:.6}55%{opacity:.9}}
 @keyframes spin{to{rotate:360deg}}
@@ -386,7 +383,7 @@ function openGate(){
     lit.style.left=(W/2-gap).toFixed(1)+'px'; lit.style.width=(gap*2).toFixed(1)+'px';
     lit.style.top=y.toFixed(1)+'px'; lit.style.height=Math.max(0,H-y).toFixed(1)+'px';
     // halo spilling over the leaves' edges, growing as the gap does
-    halo.style.width=(gap*2+60).toFixed(1)+'px'; halo.style.top=(top+fh*.3).toFixed(1)+'px';
+    halo.style.width=(gap*2+140).toFixed(1)+'px'; halo.style.top=(top+fh*.3).toFixed(1)+'px';
     halo.style.opacity=Math.min(1,gap/40).toFixed(3);
     // the last stretch: the light swallows everything
     flood.style.opacity=(t<.5?0:Math.pow((t-.5)/.5,1.6)).toFixed(3);
