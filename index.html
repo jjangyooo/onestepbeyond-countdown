@@ -45,8 +45,11 @@ button{font:inherit;color:inherit;background:none;border:0}
 /* night drifts toward us a little as we go through */
 .sky.night{transform:scale(1.1);transition:transform 3.4s cubic-bezier(.25,.5,.2,1)}
 .open .sky.night{transform:none}
+/* kept out of the page until the light has filled the screen, so it can never bleed through early */
+.sky.night{visibility:hidden}
+.done2 .sky.night{visibility:visible}
 /* everything in front of the gateway (day sky + gate). No masks here, so the 3D leaves stay intact. */
-.front{position:absolute;inset:0}
+.front{position:absolute;inset:0;transform:translateZ(0);isolation:isolate}
 /* light pouring through the gateway: a plain box between the day sky and the gate whose position and
    size JS sets each frame to the opening between the leaves (no masks, so every browser draws it the same) */
 .light{position:absolute;left:50%;top:0;width:0;height:0;opacity:0;
@@ -74,7 +77,7 @@ button{font:inherit;color:inherit;background:none;border:0}
 .lock{position:absolute;inset:0;z-index:5;display:block;width:100%;cursor:pointer;overflow:visible;
   -webkit-tap-highlight-color:transparent;will-change:transform;
   transform-origin:50% calc(var(--hy) - var(--lw)*.0945);   /* keyhole centre */
-  transition:transform 1.25s cubic-bezier(.62,0,.88,.3)}
+  transition:transform 1.25s cubic-bezier(.62,0,.88,.3),opacity .3s ease .95s}
 /* the wall, with the keyhole punched out of it so the gate scene shows through.
    The lit veil sits outside this masked layer so it never gets cut away with the hole. */
 .wall{position:absolute;inset:0;
@@ -150,7 +153,7 @@ button{font:inherit;color:inherit;background:none;border:0}
 .wall .lw,.lock>.lw{animation:rise 1.6s ease both}
 @keyframes rise{from{opacity:0}}
 /* tap: rush through the keyhole — the light veil lifts and the gate scene beyond fills the screen */
-.enter .lock{transform:scale(44)}
+.enter .lock{transform:scale(44);opacity:0}   /* fades as it passes the camera, in case a browser places the hole slightly off */
 .enter .kh{opacity:0;transition:opacity .35s ease .32s}
 .enter .pool,.enter .spill{animation:none;opacity:0;transition:opacity .3s}
 
