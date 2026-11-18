@@ -45,14 +45,12 @@ button{font:inherit;color:inherit;background:none;border:0}
 /* night drifts toward us a little as we go through */
 .sky.night{transform:scale(1.08);transition:transform 2.2s cubic-bezier(.3,.5,.2,1)}
 .open .sky.night{transform:none}
-/* everything in front of the gateway; JS sets --gap (half-width of the opening, px) */
-/* front stays wherever it's outside the gap, OR above the top of the gate (--top, px) — so night
-   only ever shows inside the gateway, never as a slit through the open sky */
-.front{position:absolute;inset:0;--gap:-1px;--top:-9999px;
-  -webkit-mask-image:linear-gradient(90deg,#000 calc(50% - var(--gap)),transparent calc(50% - var(--gap)),transparent calc(50% + var(--gap)),#000 calc(50% + var(--gap))),
-                     linear-gradient(#000 calc(var(--top) - 2svh),transparent calc(var(--top) + 9svh));
-          mask-image:linear-gradient(90deg,#000 calc(50% - var(--gap)),transparent calc(50% - var(--gap)),transparent calc(50% + var(--gap)),#000 calc(50% + var(--gap))),
-                     linear-gradient(#000 calc(var(--top) - 2svh),transparent calc(var(--top) + 9svh))}
+/* everything in front of the gateway (day sky + gate). No masks here, so the 3D leaves stay intact. */
+.front{position:absolute;inset:0}
+/* the night as seen through the gateway: a copy of the night sky sitting between the day sky and the
+   gate, revealed only between the leaves' inner edges (JS sets its mask each frame) */
+.peek{opacity:0}
+.open .peek{opacity:1}
 .done2 .front{visibility:hidden}
 /* poster-02 framing: a 16:9 frame (cover on wide screens, centred on phones) whose width the
    gate's arch spans, spire ~17% down; the bars sink into the mist toward the bottom */
@@ -247,6 +245,7 @@ button{font:inherit;color:inherit;background:none;border:0}
     <img class="sky night" src="img/sky-night.webp" alt="">
     <div class="front">
       <img class="sky day" src="img/sky-day.webp" alt="">
+      <img class="sky night peek" src="img/sky-night.webp" alt="">
       <div class="scene"><div class="gate">
         <div class="door l"><img src="img/gate-l.webp" alt=""></div>
         <div class="door r"><img src="img/gate-r.webp" alt=""></div>
@@ -359,7 +358,7 @@ document.getElementById('key').addEventListener('click',()=>{
 function openGate(){
   hero.classList.add('open');
   const front=document.querySelector('.front'), gate=document.querySelector('.gate'),
-        L=document.querySelector('.door.l'), R=document.querySelector('.door.r');
+        L=document.querySelector('.door.l'), R=document.querySelector('.door.r'), peek=document.querySelector('.peek');
   const P=1500, MAX=88*Math.PI/180, PUSH=.55, DUR=matchMedia('(prefers-reduced-motion:reduce)').matches?10:2000, t0=performance.now();
   (function frame(now){
     const t=Math.min(1,(now-t0)/DUR), e=Math.pow(t,2.4);          // ease-in: barely parts, then swings wide
@@ -368,10 +367,14 @@ function openGate(){
     gate.style.transform=`scale(${sc})`;
     // inner edge of a leaf hinged at ±half: x = half·(cosθ−1), z = half·sinθ toward the viewer
     const x=half*(Math.cos(th)-1), z=half*Math.sin(th), xp=x*P/Math.max(1,P-z);
-    front.style.setProperty('--gap',Math.max(0,-xp*sc)+'px');
-    // top of the gate (its spire, 8.8% down the artwork) in the front layer's own pixels
-    const k=front.getBoundingClientRect().width/front.offsetWidth, g=gate.getBoundingClientRect(), f=front.getBoundingClientRect();
-    front.style.setProperty('--top',((g.top-f.top)/k + g.height/k*.088)+'px');
+    // reveal the night copy only inside the gateway: between the inner edges, below the gate's top
+    const gap=Math.max(0,-xp*sc).toFixed(1);
+    const k=front.getBoundingClientRect().width/front.offsetWidth||1, g=gate.getBoundingClientRect(), f=front.getBoundingClientRect();
+    const top=((g.top-f.top)/k + g.height/k*.088).toFixed(1), fh=(front.offsetHeight*.1).toFixed(1);
+    const m=`linear-gradient(90deg,transparent calc(50% - ${gap}px),#000 calc(50% - ${gap}px),#000 calc(50% + ${gap}px),transparent calc(50% + ${gap}px)),`+
+            `linear-gradient(transparent ${top}px,#000 ${(+top + +fh).toFixed(1)}px)`;
+    peek.style.webkitMaskImage=m; peek.style.maskImage=m;
+    peek.style.webkitMaskComposite='source-in'; peek.style.maskComposite='intersect';
     front.style.opacity=t<.72?1:Math.max(0,1-(t-.72)/.28);         // last stretch: the daylight behind us falls away
     if(t<1) requestAnimationFrame(frame); else hero.classList.add('done2');
   })(t0);
