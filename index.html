@@ -47,9 +47,10 @@ button{font:inherit;color:inherit;background:none;border:0}
 .open .sky.night{transform:none}
 /* everything in front of the gateway (day sky + gate). No masks here, so the 3D leaves stay intact. */
 .front{position:absolute;inset:0}
-/* light pouring through the gateway: sits between the day sky and the gate and is revealed only
-   between the leaves' inner edges (JS sets its mask each frame); a soft halo spills over the ironwork */
-.light{opacity:0;background:radial-gradient(110% 90% at 50% 55%,#fff 0%,#f6f7ff 45%,#e2e6fb 100%)}
+/* light pouring through the gateway: a plain box between the day sky and the gate whose position and
+   size JS sets each frame to the opening between the leaves (no masks, so every browser draws it the same) */
+.light{position:absolute;left:50%;top:0;width:0;height:0;opacity:0;
+  background:linear-gradient(rgba(250,251,255,0),#fff 10svh,#f4f6ff 70%,#e6e9fb)}
 .open .light{opacity:1}
 .halo{position:absolute;left:50%;top:0;bottom:0;width:0;translate:-50% 0;pointer-events:none;opacity:0;
   background:linear-gradient(rgba(255,255,255,0),rgba(255,255,255,.9) 18%,rgba(245,247,255,.9));filter:blur(26px);mix-blend-mode:screen}
@@ -249,7 +250,7 @@ button{font:inherit;color:inherit;background:none;border:0}
     <img class="sky night" src="img/sky-night.webp" alt="">
     <div class="front">
       <img class="sky day" src="img/sky-day.webp" alt="">
-      <div class="sky light"></div>
+      <div class="light"></div>
       <div class="scene"><div class="gate">
         <div class="door l"><img src="img/gate-l.webp" alt=""></div>
         <div class="door r"><img src="img/gate-r.webp" alt=""></div>
@@ -378,10 +379,9 @@ function openGate(){
     const gap=Math.max(0,-xp*sc);
     const k=front.getBoundingClientRect().width/front.offsetWidth||1, g=gate.getBoundingClientRect(), f=front.getBoundingClientRect();
     const top=(g.top-f.top)/k + g.height/k*.088, fh=front.offsetHeight*.1;
-    const m=`linear-gradient(90deg,transparent calc(50% - ${gap.toFixed(1)}px),#000 calc(50% - ${gap.toFixed(1)}px),#000 calc(50% + ${gap.toFixed(1)}px),transparent calc(50% + ${gap.toFixed(1)}px)),`+
-            `linear-gradient(transparent ${top.toFixed(1)}px,#000 ${(top+fh).toFixed(1)}px)`;
-    lit.style.webkitMaskImage=m; lit.style.maskImage=m;
-    lit.style.webkitMaskComposite='source-in'; lit.style.maskComposite='intersect';
+    const W=front.offsetWidth, H=front.offsetHeight, y=Math.max(0,top);
+    lit.style.left=(W/2-gap).toFixed(1)+'px'; lit.style.width=(gap*2).toFixed(1)+'px';
+    lit.style.top=y.toFixed(1)+'px'; lit.style.height=Math.max(0,H-y).toFixed(1)+'px';
     // halo spilling over the leaves' edges, growing as the gap does
     halo.style.width=(gap*2+60).toFixed(1)+'px'; halo.style.top=(top+fh*.3).toFixed(1)+'px';
     halo.style.opacity=Math.min(1,gap/40).toFixed(3);
