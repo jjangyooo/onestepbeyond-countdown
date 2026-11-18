@@ -36,29 +36,36 @@ button{font:inherit;color:inherit;background:none;border:0}
   --cw:min(28vw,14svh,140px);               /* corner ornament width */
   --lw:min(40vw,20svh,200px);               /* keyhole ornament width */
   --hy:max(50svh,280px)}                    /* vertical centre of the hero */
-/* scene 2 (behind the keyhole): day sky + the gate. Scene 3: the same sky at night.
-   The two skies share their cloud shapes, so the crossfade reads as one place turning to night. */
+/* scene 2 (behind the keyhole): day sky + the gate, on a "front" layer.
+   Scene 3 (night) waits behind it and is seen only through the gap between the opening leaves;
+   as the leaves swing toward us and the camera pushes in, that gap widens until night fills the screen. */
 .stage{position:absolute;inset:0;transform:scale(.86);transition:transform 1.7s cubic-bezier(.25,.6,.2,1)}
 .enter .stage{transform:none}
 .sky{position:absolute;inset:0;width:100%;height:100%;max-width:none;object-fit:cover}
-.sky.night{opacity:0;transition:opacity 1.6s ease .6s}
-.open .sky.night{opacity:1}
+/* night drifts toward us a little as we go through */
+.sky.night{transform:scale(1.08);transition:transform 2.2s cubic-bezier(.3,.5,.2,1)}
+.open .sky.night{transform:none}
+/* everything in front of the gateway; JS sets --gap (half-width of the opening, px) */
+/* front stays wherever it's outside the gap, OR above the top of the gate (--top, px) — so night
+   only ever shows inside the gateway, never as a slit through the open sky */
+.front{position:absolute;inset:0;--gap:-1px;--top:-9999px;
+  -webkit-mask-image:linear-gradient(90deg,#000 calc(50% - var(--gap)),transparent calc(50% - var(--gap)),transparent calc(50% + var(--gap)),#000 calc(50% + var(--gap))),
+                     linear-gradient(#000 calc(var(--top) - 2svh),transparent calc(var(--top) + 9svh));
+          mask-image:linear-gradient(90deg,#000 calc(50% - var(--gap)),transparent calc(50% - var(--gap)),transparent calc(50% + var(--gap)),#000 calc(50% + var(--gap))),
+                     linear-gradient(#000 calc(var(--top) - 2svh),transparent calc(var(--top) + 9svh))}
+.done2 .front{visibility:hidden}
 /* poster-02 framing: a 16:9 frame (cover on wide screens, centred on phones) whose width the
    gate's arch spans, spire ~17% down; the bars sink into the mist toward the bottom */
 .scene{position:absolute;left:50%;top:50%;width:max(100%,108svh);aspect-ratio:2576/1431;translate:-50% -50%;
   -webkit-mask-image:linear-gradient(#000 66%,rgba(0,0,0,.38));mask-image:linear-gradient(#000 66%,rgba(0,0,0,.38))}
 @media (max-aspect-ratio:1/1){ .scene{-webkit-mask-image:linear-gradient(#000 60%,transparent);mask-image:linear-gradient(#000 60%,transparent)} }
+/* the leaves swing toward us (driven frame by frame in JS so the gap tracks their inner edges) */
 .gate{position:absolute;left:0;top:-8.1%;width:100%;aspect-ratio:1600/2504;perspective:1500px;perspective-origin:50% 21%;
-  transform-origin:50% 21%;transition:transform 1.75s cubic-bezier(.6,0,.85,.4)}
-/* the leaves swing toward us — slowly, then fast — while the camera pushes through */
-.door{position:absolute;top:0;width:50%;height:100%;will-change:transform;
-  transition:transform 1.75s cubic-bezier(.6,0,.85,.4),opacity .4s ease 1.45s}
+  transform-origin:50% 21%}
+.door{position:absolute;top:0;width:50%;height:100%;will-change:transform}
 .door img{width:100%;height:100%;max-width:none}
 .door.l{left:0;transform-origin:0 50%}
 .door.r{right:0;transform-origin:100% 50%}
-.open .gate{transform:scale(1.3)}
-.open .door.l{transform:rotateY(-86deg);opacity:0}
-.open .door.r{transform:rotateY(86deg);opacity:0}
 
 /* ───────── first screen: the lit keyhole ───────── */
 .lock{position:absolute;inset:0;z-index:5;display:block;width:100%;cursor:pointer;overflow:visible;
@@ -228,7 +235,7 @@ button{font:inherit;color:inherit;background:none;border:0}
 }
 
 @media (prefers-reduced-motion:reduce){
-  .stage,.gate,.door,.sky,.rv,.lock,.kh{transition-duration:.01s;transition-delay:0s}
+  .stage,.sky,.rv,.lock,.kh{transition-duration:.01s;transition-delay:0s}
   .fl .h{animation-duration:.01s!important;animation-delay:0s!important}
 }
 </style>
@@ -237,12 +244,14 @@ button{font:inherit;color:inherit;background:none;border:0}
 
 <section class="hero" id="hero">
   <div class="stage">
-    <img class="sky day" src="img/sky-day.webp" alt="">
     <img class="sky night" src="img/sky-night.webp" alt="">
-    <div class="scene"><div class="gate">
-      <div class="door l"><img src="img/gate-l.webp" alt=""></div>
-      <div class="door r"><img src="img/gate-r.webp" alt=""></div>
-    </div></div>
+    <div class="front">
+      <img class="sky day" src="img/sky-day.webp" alt="">
+      <div class="scene"><div class="gate">
+        <div class="door l"><img src="img/gate-l.webp" alt=""></div>
+        <div class="door r"><img src="img/gate-r.webp" alt=""></div>
+      </div></div>
+    </div>
   </div>
   <div class="grain"></div>
 
@@ -339,10 +348,34 @@ document.getElementById('key').addEventListener('click',()=>{
   if(hero.classList.contains('enter')) return;
   navigator.vibrate?.(25);
   hero.classList.add('enter');                                        // rush through the keyhole into the gate scene
-  setTimeout(()=>hero.classList.add('open'),850);                     // as we come through, the gate starts to part
+  setTimeout(openGate,850);                                           // as we come through, the gate starts to part
   setTimeout(()=>hero.classList.add('done'),1300);                    // wall is gone
-  setTimeout(()=>{ hero.classList.add('reveal'); opened=true; update(); },2700);  // night has fallen, credits slide in
+  setTimeout(()=>{ hero.classList.add('reveal'); opened=true; update(); },2750);  // night has fallen, credits slide in
 });
+
+// The gate opens toward us, slowly then fast, while the camera pushes in. Each frame we project the
+// leaves' inner edges (same perspective as the CSS) and cut the front layer open exactly between them,
+// so the night beyond is only ever seen through the gateway.
+function openGate(){
+  hero.classList.add('open');
+  const front=document.querySelector('.front'), gate=document.querySelector('.gate'),
+        L=document.querySelector('.door.l'), R=document.querySelector('.door.r');
+  const P=1500, MAX=88*Math.PI/180, PUSH=.55, DUR=matchMedia('(prefers-reduced-motion:reduce)').matches?10:2000, t0=performance.now();
+  (function frame(now){
+    const t=Math.min(1,(now-t0)/DUR), e=Math.pow(t,2.4);          // ease-in: barely parts, then swings wide
+    const th=MAX*e, half=gate.offsetWidth/2, sc=1+PUSH*Math.pow(t,1.8);
+    L.style.transform=`rotateY(${-th}rad)`; R.style.transform=`rotateY(${th}rad)`;
+    gate.style.transform=`scale(${sc})`;
+    // inner edge of a leaf hinged at ±half: x = half·(cosθ−1), z = half·sinθ toward the viewer
+    const x=half*(Math.cos(th)-1), z=half*Math.sin(th), xp=x*P/Math.max(1,P-z);
+    front.style.setProperty('--gap',Math.max(0,-xp*sc)+'px');
+    // top of the gate (its spire, 8.8% down the artwork) in the front layer's own pixels
+    const k=front.getBoundingClientRect().width/front.offsetWidth, g=gate.getBoundingClientRect(), f=front.getBoundingClientRect();
+    front.style.setProperty('--top',((g.top-f.top)/k + g.height/k*.088)+'px');
+    front.style.opacity=t<.72?1:Math.max(0,1-(t-.72)/.28);         // last stretch: the daylight behind us falls away
+    if(t<1) requestAnimationFrame(frame); else hero.classList.add('done2');
+  })(t0);
+}
 
 // dust drifting through the beam: only specks inside the light show up
 (function(){
