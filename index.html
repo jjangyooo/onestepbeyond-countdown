@@ -334,7 +334,7 @@ const hero=document.getElementById('hero');
 const lines=document.querySelectorAll('.sub p'), nudge=document.querySelector('.nudge');
 const cue=(fn,ms)=>setTimeout(()=>{ if(!hero.classList.contains('enter')) fn(); },ms);
 cue(()=>lines[0].classList.add('on'),1000);
-cue(()=>{ lines[1].classList.add('on'); nudge.classList.add('on'); hero.classList.add('nudging'); },1550);
+cue(()=>{ lines[1].classList.add('on'); nudge.classList.add('on'); hero.classList.add('nudging'); },1150);
 document.getElementById('key').addEventListener('click',()=>{
   if(hero.classList.contains('enter')) return;
   navigator.vibrate?.(25);
